@@ -9,6 +9,7 @@
 
 #include "vr/runtimes/OpenVR.hpp"
 #include "vr/runtimes/OpenXR.hpp"
+#include "vr/runtimes/OpenXR_Foveated.hpp"
 
 #include "vr/D3D11Component.hpp"
 #include "vr/D3D12Component.hpp"
