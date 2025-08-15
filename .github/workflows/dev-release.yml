@@ -2,30 +2,35 @@ name: Dev Build
 on: [push, workflow_dispatch]
 env:
   BUILD_TYPE: Release
+
 jobs:
   dev-build:
     runs-on: windows-latest
     strategy:
       matrix:
         target: [uevr]
+
     steps:
       - name: Checkout backend
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
         with:
           submodules: recursive
-          persist-credentials: false
-          fetch-depth: 1
+          token: ${{ secrets.EPIC_PAT }}
+          fetch-depth: 0
 
       - name: Configure CMake
-        run: cmake -S ${{github.workspace}} -B ${{github.workspace}}/build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
+             -G "Visual Studio 17 2022" -A x64 \
+             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
       - name: Build backend
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{matrix.target}}
-
+        run: cmake --build ${{ github.workspace }}/build \
+             --config ${{ env.BUILD_TYPE }} \
+             --target ${{ matrix.target }}
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
+        uses: actions/upload-artifact@v3
         with:
-          name: ${{matrix.target}}
-          path: ${{github.workspace}}/build/bin/${{matrix.target}}/UEVRBackend.dll
+          name: ${{ matrix.target }}
+          path: ${{ github.workspace }}/build/bin/${{ matrix.target }}/UEVRBackend.dll
           if-no-files-found: error
