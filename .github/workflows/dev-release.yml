@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          token: ${{ secrets.UESDK_PULLER }}
+          token: ${{ secrets.EPIC_PAT }}
           fetch-depth: 0
 
       - name: Configure CMake
